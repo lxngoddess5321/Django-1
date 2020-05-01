@@ -1,0 +1,172 @@
+<html lang="en">
+  <head>
+    <meta charset="utf -8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>王菜鸟的淘宝网</title>
+
+    <style>
+      form {
+        display: inline;
+      }
+
+      .add-to-cart {
+        color: #fff;
+        border-color: #f40;
+        background: #f40;
+        cursor: pointer;
+        width: 100px;
+        height: 22px;
+        text-align: center;
+        font-family: 'Hiragino Sans GB', 'microsoft yahei', sans-serif;
+        font-size: 10px;
+        border-width: 1px;
+        border-style: solid;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+      }
+
+      .to-pay {
+        position: absolute;
+        bottom: 10px;
+        right: 50%;
+        color: #fff;
+        border-color: #f40;
+        background: #f40;
+        cursor: pointer;
+        width: 100px;
+        height: 35px;
+        text-align: center;
+        font-family: 'Hiragino Sans GB', 'microsoft yahei', sans-serif;
+        font-size: 20px;
+        line-height: 35px;
+        border-width: 1px;
+        border-style: solid;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+      }
+
+      .relative {
+        position: relative;
+      }
+      .hidden {
+        display: none;
+      }
+
+      .inline-block {
+        display: inline-block;
+      }
+      .item-list .item-container {
+        vertical-align: top;
+        display: inline-block;
+        width: 18%;
+        border: 1px solid #eee;
+        background: #fff;
+        padding: 5px;
+        height: 335px;
+        position: relative;
+        margin-bottom: 15px;
+      }
+
+      .item-list .item-desc {
+        width: 100%;
+        font-size: 15px;
+        text-align: justify;
+      }
+
+      .item-list .items {
+        height: 240px;
+        width: 100%;
+      }
+
+      .item-list .option {
+        position: absolute;
+        bottom: 2px;
+      }
+
+      .cart-list {
+        padding-bottom: 80px;
+      }
+
+      .nav {
+        margin-bottom: 10px;
+      }
+
+      .nav .go-to-cart {
+        display: block;
+        color: #fff;
+        border-color: #f40;
+        background: #f40;
+        cursor: pointer;
+        width: 60px;
+        height: 22px;
+        line-height: 22px;
+        text-align: center;
+        font-family: 'Hiragino Sans GB', 'microsoft yahei', sans-serif;
+        font-size: 10px;
+        border-width: 1px;
+        border-style: solid;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+      }
+    </style>
+  </head>
+{% load static %}
+  <body>
+    <div class="nav"> 
+        <img src="{% static "banner.jpg" %}">
+          <h3 style="text-align:center;">亲，欢迎您来到天猫购物哟，快来看看有没有喜欢的加入购物车吧。</h3>
+          
+    </div>
+    <div class="nav">
+        {% if request.sessions.user %}
+            欢迎你{{ request.session.user }}
+        {% else %}
+            <a href="{%url 'user:register'%}">注册</a>
+            <a href="{%url 'user:login'%}">登录</a>
+            <a href="https://www.taobao.com/" target="_blank">点击此处访问淘宝官网!</a>
+        {% endif %}
+        <a class="go-to-cart" href="{%url 'cart:list'%}">去购物车</a>
+    </div>
+
+    {% if list %}
+    <div class="item-list">
+      {% for l in list %}
+      <div class="item-container">
+        <img class="items" src="{{l.image}}" />
+        <div class="inline-block item-desc">
+          {{ l.price }} {% if l.postal %} 包邮 {% endif %} {{ l.title | safe}}
+          {{ l.shopNick }} {{ l.payNum }}
+        </div>
+        <div class="option">
+          <div class="count inline-block">
+            库存 {{l.count}}
+          </div>
+          <form action="{%url 'cart:add-to-cart' l.id%}" method="POST">
+            {% csrf_token %}
+            <input class="hidden" />
+            <button
+              class="add-to-cart"
+              onclick="window.alert('添加成功')"
+              type="submit"
+            >
+              加入购物车
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>亲，您的购物车是空的呢！请去添加商品到购物车吧~</p>
+    {% endif %}
+
+      <h3 style="text-align:center;">技术支持：王菜鸟</h3>
+      <h5 style="text-align:center;">Powered by The king of rookies!</h5>
+      <h6 style="text-align:center;">1720929001@qq.com</h6>
+
+  </body>
+</html>

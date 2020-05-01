@@ -1,0 +1,45 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="/templates/style.css">
+  <title>王菜鸟的淘宝网--我的购物车</title>
+</head>
+
+<body class='relative cart-list'>
+  {% if list %}
+  <div class='item-list'>
+    {% for l in list %}
+    <div class='item-container'>
+      <img class='items' src={{l.image}} />
+      <div class="inline-block item-desc">
+        {{ l.price }}
+        {% if l.postal %}
+        包邮
+        {% endif %}
+        {{ l.title | safe}}
+        {{ l.shopNick }}
+        {{ l.payNum }}
+      </div>
+      <div class='option'>
+        <div class='count inline-block'>
+          数量 {{l.count}}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <form action="{%url 'pay:success' %}" method="POST">
+      {% csrf_token %}
+      <button class="to-pay">去结算</button>
+    </form>
+
+  </div>
+  {% else %}
+  <p>亲，您的购物车是空的呢！请去添加商品到购物车吧~</p>
+  <a href="{%url 'items:index' %}">点击此处返回首页</a>
+  {% endif %}
+</body>
+
+</html>
